@@ -9,17 +9,15 @@ import Logica.Nodo;
 import Logica.Posicion;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
-/**
- *
- * @author user
- */
-public class BusquedaAmplitud {
+
+public class BusquedaCostoUniforme {
     
     private int tablero[][];
     private Nodo raiz;
-    private LinkedList<Nodo> arbol;
+    private Queue<Nodo> arbol;
     int cantidadNodosExpandidos = 0;
     long TFin, tiempo; //Variables para determinar el tiempo de ejecución
     long TInicio = System.currentTimeMillis();
@@ -67,27 +65,29 @@ public class BusquedaAmplitud {
         this.raiz = raiz;
     }
 
-    public LinkedList<Nodo> getArbol() {
+    public Queue<Nodo> getArbol() {
         return arbol;
     }
 
-    public void setArbol(LinkedList<Nodo> arbol) {
+    public void setArbol(Queue<Nodo> arbol) {
         this.arbol = arbol;
     }
     
     
     public void addElementArbol(Nodo n){
-        this.arbol.addLast(n);
+        this.arbol.add(n);
     }
     
     public void removeElementArbol(Nodo n) {
-        this.arbol.removeFirst();
+        this.arbol.remove();
     }
     
-    public BusquedaAmplitud(int tablero[][]) {
+    public BusquedaCostoUniforme(int tablero[][]) {
+        
         this.tablero = tablero;
         this.raiz = new Nodo();
-        this.arbol = new LinkedList<>();
+        this.arbol = new PriorityQueue<Nodo>();
+        
     }
 
     public void buscarRaiz() throws Exception{
@@ -121,15 +121,10 @@ public class BusquedaAmplitud {
     }
     
     public int[][] aplicarBusqueda(){
-    
-        Iterator<Nodo> nombreIterator = this.arbol.iterator();
-
-        while (nombreIterator.hasNext()) {
-
-            Nodo nodoToExpand = nombreIterator.next();
+        
+        while (!arbol.isEmpty()) {
+            Nodo nodoToExpand = arbol.element();
             expandirNodo(nodoToExpand);
-            nombreIterator = this.arbol.iterator();
-            
         }
         
         return rutaTablero;
@@ -141,8 +136,7 @@ public class BusquedaAmplitud {
     
         Nodo nodoExpandido = null;
         
-        
-        if (!nodo.esMeta()) {
+        if (!nodo.esMeta()){
             
             ArrayList<String> movimientos = validarMovimientos(nodo);
             
@@ -160,24 +154,21 @@ public class BusquedaAmplitud {
                 //aumento uno la cantidad de los nodos expandidos
                 this.cantidadNodosExpandidos++;
                 
-                //System.out.println("\n\nPosicion X Padre: " + nodo.getPosicion().getPositionX());
-                //System.out.println("Posicion Y Padre: " + nodo.getPosicion().getPositionY());
-                //System.out.println("Tiene flor Padre: " + nodo.isTieneFlor());
-                //System.out.println("Posicion X: " + nodoExpandido.getPosicion().getPositionX());
-                //System.out.println("Posicion Y: " + nodoExpandido.getPosicion().getPositionY());
-                //System.out.println("Tiene flor: " + nodoExpandido.isTieneFlor());
-
-                
             }
             
             //luego de que se expanda lo que hago es eliminar el nodo expandido del arbol de busqueda
             removeElementArbol(nodo);
             
+            
         }else{
-            System.out.println("\n\nSe encontro la meta");
+            
+            System.out.println("<br><br>Se encontro la meta");
             informacionAgente += "<br><br><b>Se encontro la meta</b><br><br>";
+            System.out.println("Costo de la meta: " + nodo.getCosto()); 
+            
+            informacionAgente += "<b>Costo de la meta:</b>: " + nodo.getCosto() + "<br>";
             informacionAgente += "<b>Profundidad del arbol:</b>: " + nodo.getProfundidad() + "<br>";
-                      
+            
             System.out.println("Profundidad del arbol: " + nodo.getProfundidad());
             
             //genero la ruta
@@ -323,7 +314,7 @@ public class BusquedaAmplitud {
             
             
             //si cumple con las reglas del mundo y no se sale del mapa y ademas no se devuelve => puede aplicar el operador
-            if (reglasMundo(valorTablero, nodo.isTieneFlor()) && limiteMundo && !devolviendo) {
+            if (reglasMundo(valorTablero) && limiteMundo && !devolviendo) {
             
                 //System.out.println("\n\nse anade el operador" + operadores[i]);
                 salida.add(operadores[i]);
@@ -334,7 +325,7 @@ public class BusquedaAmplitud {
         return salida;
     }
     
-    public boolean reglasMundo(int valor, boolean tieneFlor) {
+    public boolean reglasMundo(int valor) {
         
         boolean validar = false; 
         
@@ -350,14 +341,8 @@ public class BusquedaAmplitud {
                 validar = true;
                 break;
             case 4://tortuga costo 7
-                
-                //si tiene flor puedo pasar por las tortugas
-                if (tieneFlor) {
-                    validar = true;
-                }else{
-                    validar = false;
-                }
-                
+                //en el algoritmo de costo uniforme se debe poder pasar por la tortuga y que sea el algoritmo quien decida si pasar por ahi o no segun el costo
+                validar = true;
                 break;
             case 5://princesa
                 validar = true;
@@ -371,3 +356,4 @@ public class BusquedaAmplitud {
         return validar;
     }
 }
+

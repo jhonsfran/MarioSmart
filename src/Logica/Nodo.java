@@ -9,7 +9,20 @@ package Logica;
  *
  * @author user
  */
-public class Nodo {
+public class Nodo implements Comparable<Nodo> {
+    
+    /** comparador **/
+    /** ordenamos de menor a mayor el costo; que seria la prioridad **/
+    @Override
+    public int compareTo(Nodo o) {
+        if (costo > o.getCosto()) {
+            return 1;
+        } else if (costo < o.getCosto()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 
     /** variables **/ 
     
@@ -223,6 +236,7 @@ public class Nodo {
 
     public Nodo expandir(String operador) {
                
+        //el costo de expandir el nodo es de 1
         Nodo miNodo = new Nodo(this, this.isTieneFlor(), this.profundidad+1, null, this.meta, this.tableroDeJuego, this.costo+1);
         //variable que cambia la posicion
         Posicion pos;
@@ -248,14 +262,39 @@ public class Nodo {
         
         //seteo el operador que acabo de aplicar
         miNodo.setOperador(operador);
+                
         //verifico que tenga flor. Si la flor ya es true no se puede volver a setear
         if (!this.isTieneFlor()) {
             miNodo.setTieneFlor(this.tieneFlor());
         }
+        
+        //calculamos el costo de estar en esa casilla
+        miNodo.setCosto(miNodo.getCosto() + this.calcularCosto(miNodo));
                 
         return miNodo;
     }
     
+    
+    public int calcularCosto(Nodo nodo){
+        
+        int costoFinal = 0;
+        
+        switch(nodo.getTableroDeJuego()[nodo.getPosicion().getPositionX()][nodo.getPosicion().getPositionY()]){
+
+            case 4://tortuga costo 7
+
+                //si tiene flor puedo pasar por las tortugas sin costo
+                if (!nodo.isTieneFlor()) {
+                    costoFinal = costoFinal+7;
+                }
+
+                break;
+        
+        }
+        
+        return costoFinal;
+        
+    }
     
     
     

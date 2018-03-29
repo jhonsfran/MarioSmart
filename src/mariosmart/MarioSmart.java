@@ -6,13 +6,12 @@
 package mariosmart;
 
 import Algoritmos.BusquedaAmplitud;
+import Algoritmos.BusquedaCostoUniforme;
 import Logica.ArchiveManager;
 import Vista.Mundo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -55,6 +54,7 @@ public class MarioSmart extends javax.swing.JFrame {
         jMenuInformada = new javax.swing.JMenu();
         jMenuItemAVARA = new javax.swing.JMenuItem();
         jMenuItemAEstrella = new javax.swing.JMenuItem();
+        jScrollPane1 = new javax.swing.JScrollPane(jLabelSeleccionado);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,6 +74,8 @@ public class MarioSmart extends javax.swing.JFrame {
         jLabelAlgoritmo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabelAlgoritmo.setText("Algoritmo seleccionado:");
 
+        jScrollPane1.setViewportView(jLabelSeleccionado);
+
         jButtonSalir.setText("Salir");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,6 +83,8 @@ public class MarioSmart extends javax.swing.JFrame {
             }
         });
 
+        
+        
         javax.swing.GroupLayout jPanelContenedorLayout = new javax.swing.GroupLayout(jPanelContenedor);
         jPanelContenedor.setLayout(jPanelContenedorLayout);
         jPanelContenedorLayout.setHorizontalGroup(
@@ -92,8 +96,8 @@ public class MarioSmart extends javax.swing.JFrame {
                 .addGroup(jPanelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContenedorLayout.createSequentialGroup()
                         .addGroup(jPanelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelAlgoritmo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelSeleccionado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelAlgoritmo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContenedorLayout.createSequentialGroup()
                         .addComponent(jButtonSalir)
@@ -109,7 +113,8 @@ public class MarioSmart extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(jLabelAlgoritmo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonSalir)
                 .addGap(65, 65, 65))
@@ -254,7 +259,11 @@ public class MarioSmart extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jMenuItemAmplitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAmplitudActionPerformed
+        
         BusquedaAmplitud buscarPorAmplitud = new BusquedaAmplitud(tableroDeJuego);
+        
+        
+        String texto = "<html><body><b>Busqueda por amplitud</b><br><br>";
         
         //si mario no esta en el mapa genero excepcion
         try {
@@ -265,13 +274,36 @@ public class MarioSmart extends javax.swing.JFrame {
         
         int[][] tablerito = buscarPorAmplitud.aplicarBusqueda();
         actualizarTableroBusquedas(tablerito);
+                
+        texto += buscarPorAmplitud.getInformacionAgente();
+        texto += "</body></html>";
         
-        
-        System.out.println("Cantidad de nodos expandidos: " + buscarPorAmplitud.getCantidadNodosExpandidos());
+        //informacion del agente
+        jLabelSeleccionado.setText(texto);
                 
     }//GEN-LAST:event_jMenuItemAmplitudActionPerformed
 
     private void jMenuItemCostoUniformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCostoUniformeActionPerformed
+        
+        BusquedaCostoUniforme buscarPorCostoUniforme= new BusquedaCostoUniforme(tableroDeJuego);
+        
+        String texto = "<html><body><b>Busqueda por costo Uniforme</b><br><br>";
+
+        //si mario no esta en el mapa genero excepcion
+        try {
+            buscarPorCostoUniforme.buscarRaiz();
+        } catch (Exception ex) {
+            Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int[][] tablerito = buscarPorCostoUniforme.aplicarBusqueda();
+        actualizarTableroBusquedas(tablerito);
+        
+        texto += buscarPorCostoUniforme.getInformacionAgente();
+        texto += "</body></html>";
+        
+        //informacion del agente
+        jLabelSeleccionado.setText(texto);
 
     }//GEN-LAST:event_jMenuItemCostoUniformeActionPerformed
 
@@ -335,6 +367,7 @@ public class MarioSmart extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenu jMenuNoInformada;
     private javax.swing.JPanel jPanelContenedor;
-    private javax.swing.JPanel jPanelTablero;
+    private javax.swing.JPanel jPanelTablero;      
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
