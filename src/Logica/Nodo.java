@@ -15,12 +15,28 @@ public class Nodo implements Comparable<Nodo> {
     /** ordenamos de menor a mayor el costo; que seria la prioridad **/
     @Override
     public int compareTo(Nodo o) {
-        if (costo > o.getCosto()) {
-            return 1;
-        } else if (costo < o.getCosto()) {
-            return -1;
-        } else {
-            return 0;
+        
+        if (tieneHeuristica) {
+            
+            if (heuristica > o.getCosto()) {
+                return 1;
+            } else if (heuristica < o.getCosto()) {
+                return -1;
+            } else {
+                //cuando sean iguales ingreso el ultimo que entra
+                return -1;
+            }
+            
+        }else{
+            
+            if (costo > o.getCosto()) {
+                return 1;
+            } else if (costo < o.getCosto()) {
+                return -1;
+            } else {
+                //cuando sean iguales ingreso el ultimo que entra
+                return -1;
+            }
         }
     }
 
@@ -35,10 +51,29 @@ public class Nodo implements Comparable<Nodo> {
     //El ambiente es determinista y accesible para el agente
     private int[][] tableroDeJuego;
     private int costo;
+    private int heuristica;
+    private boolean tieneHeuristica = false;
+
     
     
     /* getter and setter */
     
+    public int getHeuristica() {    
+        return heuristica;
+    }
+
+    public void setHeuristica(int heuristica) {
+        this.heuristica = heuristica;
+    }
+
+    public boolean isTieneHeuristica() {
+        return tieneHeuristica;
+    }
+
+    public void setTieneHeuristica(boolean tieneHeuristica) {
+        this.tieneHeuristica = tieneHeuristica;
+    }
+
     public Nodo getPadre() {
         return padre;
     }
@@ -236,6 +271,8 @@ public class Nodo implements Comparable<Nodo> {
 
     public Nodo expandir(String operador) {
                
+        
+        //System.out.println("voy a expandir desde el nodo. Costo del padre: " + this.costo); 
         //el costo de expandir el nodo es de 1
         Nodo miNodo = new Nodo(this, this.isTieneFlor(), this.profundidad+1, null, this.meta, this.tableroDeJuego, this.costo+1);
         //variable que cambia la posicion
@@ -270,6 +307,9 @@ public class Nodo implements Comparable<Nodo> {
         
         //calculamos el costo de estar en esa casilla
         miNodo.setCosto(miNodo.getCosto() + this.calcularCosto(miNodo));
+        
+        
+        //System.out.println("Costo del nodo de salida: " + miNodo.getCosto()); 
                 
         return miNodo;
     }

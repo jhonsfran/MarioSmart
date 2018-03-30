@@ -6,6 +6,7 @@
 package mariosmart;
 
 import Algoritmos.BusquedaAmplitud;
+import Algoritmos.BusquedaAvara;
 import Algoritmos.BusquedaCostoUniforme;
 import Logica.ArchiveManager;
 import Vista.Mundo;
@@ -312,7 +313,28 @@ public class MarioSmart extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemProfundidadActionPerformed
 
     private void jMenuItemAVARAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAVARAActionPerformed
+        
+        BusquedaAvara buscarPorAvara= new BusquedaAvara(tableroDeJuego);
+        
+        String texto = "<html><body><b>Busqueda por costo Uniforme</b><br><br>";
 
+        //si mario no esta en el mapa genero excepcion
+        try {
+            buscarPorAvara.buscarRaiz();
+            buscarPorAvara.buscarMeta();
+        } catch (Exception ex) {
+            Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int[][] tablerito = buscarPorAvara.aplicarBusqueda();
+        actualizarTableroBusquedas(tablerito);
+        
+        texto += buscarPorAvara.getInformacionAgente();
+        texto += "</body></html>";
+        
+        //informacion del agente
+        jLabelSeleccionado.setText(texto);
+        
     }//GEN-LAST:event_jMenuItemAVARAActionPerformed
 
     /**

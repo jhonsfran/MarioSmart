@@ -125,6 +125,7 @@ public class BusquedaCostoUniforme {
         while (!arbol.isEmpty()) {
             Nodo nodoToExpand = arbol.element();
             expandirNodo(nodoToExpand);
+            
         }
         
         return rutaTablero;
@@ -145,7 +146,7 @@ public class BusquedaCostoUniforme {
             while (nombreIterator.hasNext()) {
                 
                 String operador = nombreIterator.next();
-                System.out.println("operador a expandir " + operador);
+                System.out.println("\n\noperador a expandir " + operador);
                 informacionAgente += "<b>Operador aplicado</b>: " + operador + "<br>";
                 nodoExpandido = nodo.expandir(operador);
                 //ingreso el elemento expandido al arbol de busqueda
@@ -153,6 +154,14 @@ public class BusquedaCostoUniforme {
                 
                 //aumento uno la cantidad de los nodos expandidos
                 this.cantidadNodosExpandidos++;
+                
+                
+                /*System.out.println("\n\nPosicion X Padre: " + nodo.getPosicion().getPositionX());
+                System.out.println("Posicion Y Padre: " + nodo.getPosicion().getPositionY());
+                System.out.println("Tiene flor Padre: " + nodo.isTieneFlor());
+                System.out.println("Posicion X: " + nodoExpandido.getPosicion().getPositionX());
+                System.out.println("Posicion Y: " + nodoExpandido.getPosicion().getPositionY());
+                System.out.println("Tiene flor: " + nodoExpandido.isTieneFlor());*/
                 
             }
             
@@ -243,8 +252,6 @@ public class BusquedaCostoUniforme {
                         limiteMundo = nodo.puedeSubir();
                         pos = new Posicion(nodo.getPosicion().getPositionX()-1,nodo.getPosicion().getPositionY());
                         devolviendo = nodo.seEstaDevolviendo(pos);
-                        //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero, nodo.tieneFlor()) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
-
                         break;
                     
                     //por si el index del array llega a un valor raro
@@ -263,8 +270,6 @@ public class BusquedaCostoUniforme {
                         limiteMundo = nodo.puedeBajar();
                         pos = new Posicion(nodo.getPosicion().getPositionX()+1, nodo.getPosicion().getPositionY());
                         devolviendo = nodo.seEstaDevolviendo(pos);
-                        //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero, nodo.tieneFlor()) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
-
                         break;
                     
                     }catch(ArrayIndexOutOfBoundsException e){
@@ -282,8 +287,6 @@ public class BusquedaCostoUniforme {
                         limiteMundo = nodo.puedeIzquierda();
                         pos = new Posicion(nodo.getPosicion().getPositionX(),nodo.getPosicion().getPositionY()-1);
                         devolviendo = nodo.seEstaDevolviendo(pos);
-                        //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero, nodo.tieneFlor()) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
-
                         break;
                     
                     }catch(ArrayIndexOutOfBoundsException e){
@@ -300,8 +303,6 @@ public class BusquedaCostoUniforme {
                         limiteMundo = nodo.puedeDerecha();
                         pos = new Posicion(nodo.getPosicion().getPositionX(),nodo.getPosicion().getPositionY()+1);
                         devolviendo = nodo.seEstaDevolviendo(pos);
-                        //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero, nodo.tieneFlor()) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo );
-
                         break;
                     
                     }catch(ArrayIndexOutOfBoundsException e){
@@ -314,7 +315,13 @@ public class BusquedaCostoUniforme {
             
             
             //si cumple con las reglas del mundo y no se sale del mapa y ademas no se devuelve => puede aplicar el operador
+            
+            //evitando devolverme
             if (reglasMundo(valorTablero) && limiteMundo && !devolviendo) {
+            //no evite devolverse
+            //if (reglasMundo(valorTablero) && limiteMundo) {
+                
+                //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
             
                 //System.out.println("\n\nse anade el operador" + operadores[i]);
                 salida.add(operadores[i]);
