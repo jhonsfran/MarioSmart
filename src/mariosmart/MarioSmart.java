@@ -5,6 +5,7 @@
  */
 package mariosmart;
 
+import Algoritmos.BusquedaA;
 import Algoritmos.BusquedaAmplitud;
 import Algoritmos.BusquedaAvara;
 import Algoritmos.BusquedaCostoUniforme;
@@ -248,7 +249,27 @@ public class MarioSmart extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCargarArchivoActionPerformed
 
     private void jMenuItemAEstrellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAEstrellaActionPerformed
+        
+        BusquedaA buscarEstrella = new BusquedaA(tableroDeJuego);
 
+        String texto = "<html><body><b>Busqueda A*</b><br><br>";
+
+        //si mario no esta en el mapa genero excepcion
+        try {
+            buscarEstrella.buscarRaiz();
+            buscarEstrella.buscarMeta();
+        } catch (Exception ex) {
+            Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int[][] tablerito = buscarEstrella.aplicarBusqueda();
+        actualizarTableroBusquedas(tablerito);
+
+        texto += buscarEstrella.getInformacionAgente();
+        texto += "<br></body></html>";
+
+        //informacion del agente
+        jLabelSeleccionado.setText(texto);
     }//GEN-LAST:event_jMenuItemAEstrellaActionPerformed
 
     private void jMenuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSalirActionPerformed
@@ -277,7 +298,7 @@ public class MarioSmart extends javax.swing.JFrame {
         actualizarTableroBusquedas(tablerito);
                 
         texto += buscarPorAmplitud.getInformacionAgente();
-        texto += "</body></html>";
+        texto += "<br></body></html>";
         
         //informacion del agente
         jLabelSeleccionado.setText(texto);
@@ -301,7 +322,7 @@ public class MarioSmart extends javax.swing.JFrame {
         actualizarTableroBusquedas(tablerito);
         
         texto += buscarPorCostoUniforme.getInformacionAgente();
-        texto += "</body></html>";
+        texto += "<br></body></html>";
         
         //informacion del agente
         jLabelSeleccionado.setText(texto);
@@ -316,7 +337,7 @@ public class MarioSmart extends javax.swing.JFrame {
         
         BusquedaAvara buscarPorAvara= new BusquedaAvara(tableroDeJuego);
         
-        String texto = "<html><body><b>Busqueda por costo Uniforme</b><br><br>";
+        String texto = "<html><body><b>Busqueda AVARA</b><br><br>";
 
         //si mario no esta en el mapa genero excepcion
         try {
@@ -330,7 +351,7 @@ public class MarioSmart extends javax.swing.JFrame {
         actualizarTableroBusquedas(tablerito);
         
         texto += buscarPorAvara.getInformacionAgente();
-        texto += "</body></html>";
+        texto += "<br></body></html>";
         
         //informacion del agente
         jLabelSeleccionado.setText(texto);

@@ -18,13 +18,13 @@ public class Nodo implements Comparable<Nodo> {
         
         if (tieneHeuristica) {
             
-            if (heuristica > o.getCosto()) {
+            if (heuristica > o.getHeuristica()) {
                 return 1;
-            } else if (heuristica < o.getCosto()) {
+            } else if (heuristica < o.getHeuristica()) {
                 return -1;
             } else {
                 //cuando sean iguales ingreso el ultimo que entra
-                return -1;
+                return 1;
             }
             
         }else{
@@ -62,8 +62,38 @@ public class Nodo implements Comparable<Nodo> {
         return heuristica;
     }
 
-    public void setHeuristica(int heuristica) {
-        this.heuristica = heuristica;
+    public void setHeuristica(int heuristica, boolean avara) {
+        
+        
+        if (avara) {
+            
+           this.heuristica = heuristica; 
+           
+        }else{
+        
+            if (padre.getProfundidad() != 0) {
+                
+                //este cambio se realizo porque debemos escojer la ruta maxima
+                //si la heuristica del padre es mayor que la del hijo queire decir que la heuristica utilizada no es monotonica
+                //por eso se debe hacer esto
+                if (padre.getHeuristica() > heuristica) {
+                    
+                    this.heuristica = padre.getHeuristica();
+                    
+                } else {
+                    
+                    this.heuristica = heuristica;
+                    
+                }
+                
+            }else{
+                
+               this.heuristica = heuristica;  
+               
+            }
+        }
+        
+        
     }
 
     public boolean isTieneHeuristica() {

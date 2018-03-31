@@ -80,7 +80,7 @@ public class BusquedaAvara {
     }
     
     public void removeElementArbol(Nodo n) {
-        this.arbol.remove();
+        this.arbol.remove(n);
     }
     
     public BusquedaAvara(int tablero[][]) {
@@ -164,6 +164,46 @@ public class BusquedaAvara {
     
     public void expandirNodo(Nodo nodo){
     
+        
+        
+        /*
+        Nodo nodoExpandido1 = new Nodo(null, false, 0, null, 0, null, 0);
+        nodoExpandido1.setTieneHeuristica(true);
+        nodoExpandido1.setHeuristica(6);
+        
+        Nodo nodoExpandido2 = new Nodo(null, false, 0, null, 0, null, 0);
+        nodoExpandido2.setTieneHeuristica(true);
+        nodoExpandido2.setHeuristica(8);
+        
+        Nodo nodoExpandido3 = new Nodo(null, false, 0, null, 0, null, 0);
+        nodoExpandido3.setTieneHeuristica(true);
+        nodoExpandido3.setHeuristica(1);
+        
+        Nodo nodoExpandido4 = new Nodo(null, false, 0, null, 0, null, 0);
+        nodoExpandido4.setTieneHeuristica(true);
+        nodoExpandido4.setHeuristica(0);
+        
+        Nodo nodoExpandido5 = new Nodo(null, false, 0, null, 0, null, 0);
+        nodoExpandido5.setTieneHeuristica(true);
+        nodoExpandido5.setHeuristica(3);
+
+        //ingreso el elemento expandido al arbol de busqueda
+        addElementArbol(nodoExpandido1);
+        addElementArbol(nodoExpandido2);
+        addElementArbol(nodoExpandido3);
+        addElementArbol(nodoExpandido4);
+        addElementArbol(nodoExpandido5);
+        
+        while (!arbol.isEmpty()) {
+            
+            Nodo nodoToExpand = arbol.element();
+            System.out.println("heuristica del elemento " + nodoToExpand.getHeuristica());
+            arbol.remove();
+
+        }
+        */
+        
+        
         Nodo nodoExpandido = null;
         
         if (!nodo.esMeta()){
@@ -181,7 +221,8 @@ public class BusquedaAvara {
                 
                 //seteo la heuristica - al setear el campo de tiene heuristica cambio la prioridad de la cola
                 nodoExpandido.setTieneHeuristica(true);
-                nodoExpandido.setHeuristica(h(nodoExpandido));
+                nodoExpandido.setHeuristica(h(nodoExpandido),true);
+                
                 //ingreso el elemento expandido al arbol de busqueda
                 addElementArbol(nodoExpandido);
                 
@@ -192,17 +233,17 @@ public class BusquedaAvara {
                 System.out.println("Valor Heuristica: " + nodoExpandido.getHeuristica());
                 
                 
-                /*System.out.println("\n\nPosicion X Padre: " + nodo.getPosicion().getPositionX());
+                System.out.println("\n\nPosicion X Padre: " + nodo.getPosicion().getPositionX());
                 System.out.println("Posicion Y Padre: " + nodo.getPosicion().getPositionY());
                 System.out.println("Tiene flor Padre: " + nodo.isTieneFlor());
                 System.out.println("Posicion X: " + nodoExpandido.getPosicion().getPositionX());
                 System.out.println("Posicion Y: " + nodoExpandido.getPosicion().getPositionY());
-                System.out.println("Tiene flor: " + nodoExpandido.isTieneFlor());*/
+                System.out.println("Tiene flor: " + nodoExpandido.isTieneFlor());
                 
             }
             
             //luego de que se expanda lo que hago es eliminar el nodo expandido del arbol de busqueda
-            //removeElementArbol(nodo);
+            removeElementArbol(nodo);
             
             
         }else{
@@ -353,6 +394,7 @@ public class BusquedaAvara {
             //si cumple con las reglas del mundo y no se sale del mapa y ademas no se devuelve => puede aplicar el operador
             
             //evitando devolverme
+            //if (reglasMundo(valorTablero, nodo.isTieneFlor()) && limiteMundo && !devolviendo) {
             if (reglasMundo(valorTablero) && limiteMundo && !devolviendo) {
             //no evite devolverse
             //if (reglasMundo(valorTablero) && limiteMundo) {
@@ -368,6 +410,7 @@ public class BusquedaAvara {
         return salida;
     }
     
+    //public boolean reglasMundo(int valor, boolean tieneFlor) {
     public boolean reglasMundo(int valor) {
         
         boolean validar = false; 
@@ -384,8 +427,14 @@ public class BusquedaAvara {
                 validar = true;
                 break;
             case 4://tortuga costo 7
-                //en el algoritmo de costo uniforme se debe poder pasar por la tortuga y que sea el algoritmo quien decida si pasar por ahi o no segun el costo
-                validar = true;
+
+                //si tiene flor puedo pasar por las tortugas
+                //if (tieneFlor) {
+                    validar = true;
+                //} else {
+                   // validar = false;
+                //}
+                
                 break;
             case 5://princesa
                 validar = true;
@@ -401,8 +450,21 @@ public class BusquedaAvara {
     
     //diseno de la funcion heuristica
     public int h(Nodo nodo){
+        
+        
+        System.out.println("Valor de las coordenadas meta X: " + meta.getPosicion().getPositionX());
+        System.out.println("Valor de las coordenadas meta Y: " + meta.getPosicion().getPositionY());
+        
+        
+        System.out.println("Valor de las coordenadas actual X: " + nodo.getPosicion().getPositionX());
+        System.out.println("Valor de las coordenadas actual Y: " + nodo.getPosicion().getPositionY());
+                
         //distancia de manhathan
         int heuristica = Math.abs(meta.getPosicion().getPositionX() - nodo.getPosicion().getPositionX()) + Math.abs(meta.getPosicion().getPositionY() - nodo.getPosicion().getPositionY());
+        
+        
+        System.out.println("Valor Heuristica desde la funcion h: " + heuristica);
+                
         return heuristica;
     }
 }

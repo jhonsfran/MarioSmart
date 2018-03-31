@@ -79,7 +79,7 @@ public class BusquedaCostoUniforme {
     }
     
     public void removeElementArbol(Nodo n) {
-        this.arbol.remove();
+        this.arbol.remove(n);
     }
     
     public BusquedaCostoUniforme(int tablero[][]) {
