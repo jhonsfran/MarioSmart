@@ -74,8 +74,8 @@ public class Nodo implements Comparable<Nodo> {
             if (padre.getProfundidad() != 0) {
                 
                 //este cambio se realizo porque debemos escojer la ruta maxima
-                //si la heuristica del padre es mayor que la del hijo queire decir que la heuristica utilizada no es monotonica
-                //por eso se debe hacer esto
+                //si la heuristica del padre es mayor que la del hijo quiere decir que la heuristica utilizada no es monotonica
+                //por eso se debe hacer esto ' escoger la del padre
                 if (padre.getHeuristica() > heuristica) {
                     
                     this.heuristica = padre.getHeuristica();
@@ -289,10 +289,18 @@ public class Nodo implements Comparable<Nodo> {
         //se busca la posicion del padre y se pregunta se la posicion actual es igual a la del padre
         if (padre != null) {
             if (pos.getPositionX() == padre.getPosicion().getPositionX() && pos.getPositionY() == padre.getPosicion().getPositionY()) {
-                return true;
+                
+                //si tiene flor se puede devolver
+                if (tieneFlor) {
+                    return false;
+                }else{
+                    return true;
+                }
+                
             } else {
                 return false;
             }
+            
         }else{
             return false;
         }
@@ -331,8 +339,7 @@ public class Nodo implements Comparable<Nodo> {
         miNodo.setOperador(operador);
                 
         //verifico que tenga flor. Si la flor ya es true no se puede volver a setear
-        if (!this.isTieneFlor()) {
-            miNodo.setTieneFlor(this.tieneFlor());
+        if (!this.isTieneFlor()) {            miNodo.setTieneFlor(this.tieneFlor());
         }
         
         //calculamos el costo de estar en esa casilla
