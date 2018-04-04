@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 
-public class BusquedaA {
+public class BusquedaProfundidadSinCiclos {
     
     private int tablero[][];
     private Nodo raiz;
@@ -83,7 +83,7 @@ public class BusquedaA {
         this.arbol.remove(n);
     }
     
-    public BusquedaA(int tablero[][]) {
+    public BusquedaProfundidadSinCiclos(int tablero[][]) {
         
         this.tablero = tablero;
         this.raiz = new Nodo();

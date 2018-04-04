@@ -120,6 +120,32 @@ public class BusquedaAmplitud {
         }
     }
     
+    public void buscarMeta() throws Exception {
+
+        Nodo miNodoMeta = null;
+
+        for (int i = 0; i < this.tablero.length; i++) {
+            for (int j = 0; j < this.tablero.length; j++) {
+
+                if (this.tablero[i][j] == 5) {
+
+                    miNodoMeta = new Nodo(null, false, 0, null, 5, this.tablero, 0);
+                    // i es x y j es y
+                    Posicion pos = new Posicion(i, j);
+                    miNodoMeta.setPosicion(pos);
+
+                    break;
+
+                }
+
+            }
+        }
+
+        if (miNodoMeta.getMeta() == 0) {
+            throw new Exception("La meta no esta en el archivo");
+        }
+    }
+    
     public int[][] aplicarBusqueda(){
     
         Iterator<Nodo> nombreIterator = this.arbol.iterator();

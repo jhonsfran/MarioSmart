@@ -290,6 +290,7 @@ public class MarioSmart extends javax.swing.JFrame {
         //si mario no esta en el mapa genero excepcion
         try {
             buscarPorAmplitud.buscarRaiz();
+            buscarPorAmplitud.buscarMeta();
         } catch (Exception ex) {
             Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -313,7 +314,10 @@ public class MarioSmart extends javax.swing.JFrame {
 
         //si mario no esta en el mapa genero excepcion
         try {
+            
             buscarPorCostoUniforme.buscarRaiz();
+            buscarPorCostoUniforme.buscarMeta();
+            
         } catch (Exception ex) {
             Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
         }
