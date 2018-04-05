@@ -9,6 +9,7 @@ import Algoritmos.BusquedaA;
 import Algoritmos.BusquedaAmplitud;
 import Algoritmos.BusquedaAvara;
 import Algoritmos.BusquedaCostoUniforme;
+import Algoritmos.BusquedaProfundidadSinCiclos;
 import Logica.ArchiveManager;
 import Vista.Mundo;
 import java.io.File;
@@ -335,6 +336,30 @@ public class MarioSmart extends javax.swing.JFrame {
 
     private void jMenuItemProfundidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProfundidadActionPerformed
 
+        BusquedaProfundidadSinCiclos buscarPorPrufundidadSinCiclos = new BusquedaProfundidadSinCiclos(tableroDeJuego);
+
+        String texto = "<html><body><b>Busqueda por Profundidad evitando ciclos/b><br><br>";
+
+        //si mario no esta en el mapa genero excepcion
+        try {
+
+            buscarPorPrufundidadSinCiclos.buscarRaiz();
+            buscarPorPrufundidadSinCiclos.buscarMeta();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MarioSmart.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int[][] tablerito = buscarPorPrufundidadSinCiclos.aplicarBusqueda();
+        actualizarTableroBusquedas(tablerito);
+
+        texto += buscarPorPrufundidadSinCiclos.getInformacionAgente();
+        texto += "<br></body></html>";
+
+        //informacion del agente
+        jLabelSeleccionado.setText(texto);
+        
+        
     }//GEN-LAST:event_jMenuItemProfundidadActionPerformed
 
     private void jMenuItemAVARAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAVARAActionPerformed

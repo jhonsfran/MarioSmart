@@ -10,7 +10,7 @@ import Logica.Posicion;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Stack;
 
 
 public class BusquedaProfundidadSinCiclos {
@@ -18,7 +18,7 @@ public class BusquedaProfundidadSinCiclos {
     private int tablero[][];
     private Nodo raiz;
     private Nodo meta;
-    private Queue<Nodo> arbol;
+    private Stack<Nodo> arbol;
     int cantidadNodosExpandidos = 0;
     long TFin, tiempo; //Variables para determinar el tiempo de ejecución
     long TInicio = System.currentTimeMillis();
@@ -66,28 +66,28 @@ public class BusquedaProfundidadSinCiclos {
         this.raiz = raiz;
     }
 
-    public Queue<Nodo> getArbol() {
+    public Stack<Nodo> getArbol() {
         return arbol;
     }
 
-    public void setArbol(Queue<Nodo> arbol) {
+    public void setArbol(Stack<Nodo> arbol) {
         this.arbol = arbol;
     }
     
     
     public void addElementArbol(Nodo n){
-        this.arbol.add(n);
+        this.arbol.push(n);
     }
     
-    public void removeElementArbol(Nodo n) {
-        this.arbol.remove(n);
+    public void removeElementArbol() {
+        this.arbol.pop();
     }
     
     public BusquedaProfundidadSinCiclos(int tablero[][]) {
         
         this.tablero = tablero;
         this.raiz = new Nodo();
-        this.arbol = new PriorityQueue<Nodo>();
+        this.arbol = new Stack<Nodo>();
         
     }
 
@@ -153,8 +153,17 @@ public class BusquedaProfundidadSinCiclos {
         
         while (!arbol.isEmpty()) {
             
-            Nodo nodoToExpand = arbol.element();            
-            expandirNodo(nodoToExpand);
+            Nodo nodoToExpand = arbol.pop();
+            
+            //verifico que el nodo que voy a expandir no haga parte de un ciclo
+            //si lo es, paso de el y no lo expando. Tomo el siguiente nodo en el arbol que seria el mas profundo            
+            if (!evitarCiclo(nodoToExpand)) {
+                
+                expandirNodo(nodoToExpand);
+
+            }
+                       
+            
             
         }
         
@@ -164,31 +173,15 @@ public class BusquedaProfundidadSinCiclos {
     }
     
     public void expandirNodo(Nodo nodo){
-    
-        System.out.println("Costo del nodo " + nodo.getCosto());
-        System.out.println("Heuristica del nodo " + nodo.getHeuristica());
+   
         
-        /*
-        Nodo nodoExpandido1 = new Nodo(null, false, 0, null, 0, null, 0);
-        nodoExpandido1.setTieneHeuristica(true);
-        nodoExpandido1.setHeuristica(6);
         
-        Nodo nodoExpandido2 = new Nodo(null, false, 0, null, 0, null, 0);
-        nodoExpandido2.setTieneHeuristica(true);
-        nodoExpandido2.setHeuristica(8);
+        /*Nodo nodoExpandido1 = new Nodo(null, false, 0, null, 0, null, 0);
+        Nodo nodoExpandido2 = new Nodo(null, false, 1, null, 0, null, 0);
+        Nodo nodoExpandido3 = new Nodo(null, false, 2, null, 0, null, 0);
+        Nodo nodoExpandido4 = new Nodo(null, false, 3, null, 0, null, 0);        
+        Nodo nodoExpandido5 = new Nodo(null, false, 4, null, 0, null, 0);
         
-        Nodo nodoExpandido3 = new Nodo(null, false, 0, null, 0, null, 0);
-        nodoExpandido3.setTieneHeuristica(true);
-        nodoExpandido3.setHeuristica(1);
-        
-        Nodo nodoExpandido4 = new Nodo(null, false, 0, null, 0, null, 0);
-        nodoExpandido4.setTieneHeuristica(true);
-        nodoExpandido4.setHeuristica(0);
-        
-        Nodo nodoExpandido5 = new Nodo(null, false, 0, null, 0, null, 0);
-        nodoExpandido5.setTieneHeuristica(true);
-        nodoExpandido5.setHeuristica(3);
-
         //ingreso el elemento expandido al arbol de busqueda
         addElementArbol(nodoExpandido1);
         addElementArbol(nodoExpandido2);
@@ -198,14 +191,11 @@ public class BusquedaProfundidadSinCiclos {
         
         while (!arbol.isEmpty()) {
             
-            Nodo nodoToExpand = arbol.element();
-            System.out.println("heuristica del elemento " + nodoToExpand.getHeuristica());
-            arbol.remove();
+            Nodo nodoToExpand = arbol.pop();
+            System.out.println("heuristica del elemento " + nodoToExpand.getProfundidad());
 
-        }
-        */
-        
-        
+        }*/
+                
         Nodo nodoExpandido = null;
         
         if (!nodo.esMeta()){
@@ -221,31 +211,13 @@ public class BusquedaProfundidadSinCiclos {
                 informacionAgente += "<b>Operador aplicado</b>: " + operador + "<br>";
                 nodoExpandido = nodo.expandir(operador);
                 
-                //seteo la heuristica - al setear el campo de tiene heuristica cambio la prioridad de la cola
-                nodoExpandido.setTieneHeuristica(true);
-                nodoExpandido.setHeuristica(f(nodoExpandido),false);
-                
+
                 //ingreso el elemento expandido al arbol de busqueda
                 addElementArbol(nodoExpandido);
-                
                 //aumento uno la cantidad de los nodos expandidos
                 this.cantidadNodosExpandidos++;
                 
-                /*System.out.println("Tiene Heuristica: " + nodoExpandido.isTieneHeuristica());
-                System.out.println("Valor Heuristica: " + nodoExpandido.getHeuristica());
-                
-                
-                System.out.println("\n\nPosicion X Padre: " + nodo.getPosicion().getPositionX());
-                System.out.println("Posicion Y Padre: " + nodo.getPosicion().getPositionY());
-                System.out.println("Tiene flor Padre: " + nodo.isTieneFlor());
-                System.out.println("Posicion X: " + nodoExpandido.getPosicion().getPositionX());
-                System.out.println("Posicion Y: " + nodoExpandido.getPosicion().getPositionY());
-                System.out.println("Tiene flor: " + nodoExpandido.isTieneFlor());*/
-                
             }
-            
-            //luego de que se expanda lo que hago es eliminar el nodo expandido del arbol de busqueda
-            removeElementArbol(nodo);
             
             
         }else{
@@ -270,9 +242,45 @@ public class BusquedaProfundidadSinCiclos {
             
             informacionAgente += "<b>Tiempo de ejecución en milisegundos:</b>: " + tiempo + "<br>";
             informacionAgente += "<b>Cantidad de nodos expandidos:</b>: " + getCantidadNodosExpandidos() + "<br>";
+            
         }
     
     }
+    
+    
+    //si lo vemos bien no es tan costoso. Solo busca por cada nivel del arbol si el estado actual se repite.
+    public boolean evitarCiclo(Nodo nodo) {
+
+        Nodo miNodo;
+        //si no es raiz entonces le busco el padre
+        if (nodo.getProfundidad() != 0) {
+            miNodo = nodo.getPadre();
+        }else{
+            //si es padre entonces ni pregunto, solo returno false
+            return false;
+        }
+        
+        boolean ciclo = false;
+        
+        while (miNodo.getProfundidad() != 0) {
+            
+            //evitar ciclo se define como que el nodo no se repita en una misma rama - con  esto verifico si alguno de sus ancestros ha estado en esa posicion
+            if (nodo.getPosicion().getPositionX() == miNodo.getPosicion().getPositionX() && nodo.getPosicion().getPositionY() == miNodo.getPosicion().getPositionY()) {
+                //si mario tiene flor && cuando estuvo en la posicion del ancestro no tenia entonces lo dejo pasar - sino quiere decir que el mismo estado se repite
+                //sobre la misma rama. Lo que me indica un ciclo.
+                if (nodo.isTieneFlor() == miNodo.isTieneFlor()) {
+                    return true; 
+                    //lo retorno de una para romper el ciclo. Si ya se que hay ciclo no necesito mas
+                }
+            } 
+            
+            miNodo = miNodo.getPadre();
+
+        }
+
+        return ciclo;
+    }
+
     
     public int[][] generarRuta(Nodo nodo){
         
@@ -309,7 +317,8 @@ public class BusquedaProfundidadSinCiclos {
     public ArrayList<String> validarMovimientos(Nodo nodo) {
         
         //este es el orden de los operadores. Asi se ejecutaran al expandir el nodo
-        String operadores[] = {"subir","bajar","izquierda","derecha"};
+        //aqui el orden de lo operadores si afecta el rendimiento del algoritmo
+        String operadores[] = {"bajar","izquierda","derecha","subir"};
         ArrayList<String> salida = new ArrayList<String>();
         int valorTablero = 0;
         //verifica si al realizar la operacion el agente no se sale del mundo 10 x 10
@@ -392,13 +401,14 @@ public class BusquedaProfundidadSinCiclos {
                     
             }
             
-            
-            //si cumple con las reglas del mundo y no se sale del mapa y ademas no se devuelve => puede aplicar el operador
+            System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero, nodo.tieneFlor()) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
+
+            //si cumple con las reglas del mundo y no se sale del mapa y ademas no se devuelve=> puede aplicar el operador
             
             //evitando devolverme
             if (reglasMundo(valorTablero, nodo.isTieneFlor()) && limiteMundo && !devolviendo) {
             //no evite devolverse
-            //if (reglasMundo(valorTablero) && limiteMundo) {
+            //if (reglasMundo(valorTablero, nodo.isTieneFlor()) && limiteMundo) {
                 
                 //System.out.println("\n\npara validar " + operadores[i] + " : \n reglas del mundo: " + reglasMundo(valorTablero) + "\nlimite del mundo : " + limiteMundo + "\ndevolviendo : " + devolviendo);
             
@@ -428,13 +438,7 @@ public class BusquedaProfundidadSinCiclos {
                 break;
             case 4://tortuga costo 7
 
-                //si tiene flor puedo pasar por las tortugas
-                if (tieneFlor) {
-                    validar = true;
-                } else {
-                    validar = false;
-                }
-                
+                validar = true;
                 break;
             case 5://princesa
                 validar = true;
@@ -448,16 +452,5 @@ public class BusquedaProfundidadSinCiclos {
         return validar;
     }
     
-    //diseno de la funcion heuristica
-    public int f(Nodo nodo){
-                        
-        //distancia de manhathan
-        int heuristica = Math.abs(meta.getPosicion().getPositionX() - nodo.getPosicion().getPositionX()) + Math.abs(meta.getPosicion().getPositionY() - nodo.getPosicion().getPositionY());
-        
-        //la heuristica seria la funcion f
-        int f = heuristica + nodo.getCosto();
-                
-        return f;
-    }
 }
 

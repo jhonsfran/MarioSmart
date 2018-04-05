@@ -276,7 +276,7 @@ public class Nodo implements Comparable<Nodo> {
     }
     
     public boolean tieneFlor(){
-        //si la posicion actual de mario tiene el valor igual a la meta => esMeta
+        //si la posicion actual de mario tiene el valor igual 3 => esFlor
         if (tableroDeJuego[posicion.getPositionX()][posicion.getPositionY()] == 3) {
             return true;
         } else {
@@ -288,6 +288,7 @@ public class Nodo implements Comparable<Nodo> {
         
         //se busca la posicion del padre y se pregunta se la posicion actual es igual a la del padre
         if (padre != null) {
+            
             if (pos.getPositionX() == padre.getPosicion().getPositionX() && pos.getPositionY() == padre.getPosicion().getPositionY()) {
                 
                 //si tiene flor se puede devolver
@@ -339,7 +340,8 @@ public class Nodo implements Comparable<Nodo> {
         miNodo.setOperador(operador);
                 
         //verifico que tenga flor. Si la flor ya es true no se puede volver a setear
-        if (!this.isTieneFlor()) {            miNodo.setTieneFlor(this.tieneFlor());
+        if (!this.isTieneFlor()) {            
+            miNodo.setTieneFlor(this.tieneFlor());
         }
         
         //calculamos el costo de estar en esa casilla
