@@ -451,20 +451,9 @@ public class BusquedaAvara {
     //diseno de la funcion heuristica
     public int h(Nodo nodo){
         
-        
-        System.out.println("Valor de las coordenadas meta X: " + meta.getPosicion().getPositionX());
-        System.out.println("Valor de las coordenadas meta Y: " + meta.getPosicion().getPositionY());
-        
-        
-        System.out.println("Valor de las coordenadas actual X: " + nodo.getPosicion().getPositionX());
-        System.out.println("Valor de las coordenadas actual Y: " + nodo.getPosicion().getPositionY());
-                
         //distancia de manhathan
         int heuristica = Math.abs(meta.getPosicion().getPositionX() - nodo.getPosicion().getPositionX()) + Math.abs(meta.getPosicion().getPositionY() - nodo.getPosicion().getPositionY());
-        
-        
-        System.out.println("Valor Heuristica desde la funcion h: " + heuristica);
-                
+
         return heuristica;
     }
 }

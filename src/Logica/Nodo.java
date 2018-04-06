@@ -289,10 +289,11 @@ public class Nodo implements Comparable<Nodo> {
         //se busca la posicion del padre y se pregunta se la posicion actual es igual a la del padre
         if (padre != null) {
             
-            if (pos.getPositionX() == padre.getPosicion().getPositionX() && pos.getPositionY() == padre.getPosicion().getPositionY()) {
+            if ((pos.getPositionX() == padre.getPosicion().getPositionX() && pos.getPositionY() == padre.getPosicion().getPositionY())) {
                 
-                //si tiene flor se puede devolver
-                if (tieneFlor) {
+                //si tiene flor se puede devolver, siempre y cuando el padre no haya tenido flor
+                //mejor dicho, si el estado ha cambiado de padre a hijo en la misma posiciones entonces no se está devolviendo
+                if (this.tieneFlor != padre.isTieneFlor()) {
                     return false;
                 }else{
                     return true;
@@ -338,17 +339,16 @@ public class Nodo implements Comparable<Nodo> {
         
         //seteo el operador que acabo de aplicar
         miNodo.setOperador(operador);
-                
+        
+        //calculamos el costo de estar en esa casilla
+        miNodo.setCosto(miNodo.getCosto() + this.calcularCosto(miNodo));
+
+             
+        //aplico el operado y luego si seteo la variable. Al asignar la flor se debe hacer de último, para que no afecte el costo del nodo actual.
         //verifico que tenga flor. Si la flor ya es true no se puede volver a setear
         if (!this.isTieneFlor()) {            
             miNodo.setTieneFlor(this.tieneFlor());
         }
-        
-        //calculamos el costo de estar en esa casilla
-        miNodo.setCosto(miNodo.getCosto() + this.calcularCosto(miNodo));
-        
-        
-        //System.out.println("Costo del nodo de salida: " + miNodo.getCosto()); 
                 
         return miNodo;
     }
